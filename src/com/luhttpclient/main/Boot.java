@@ -90,6 +90,7 @@ public class Boot extends Application {
 
         inputField = new TextField();
         outputArea = new TextArea();
+        outputArea.setWrapText(true);
 
         BorderPane root = new BorderPane();
         root.setTop(headerLabel);

@@ -13,10 +13,12 @@ import java.io.InputStreamReader;
  */
 
 public class HTTPClientWrapper {
+    private DefaultHttpClient httpClient;
+
     private boolean processing;
 
     public HTTPClientWrapper() {
-
+        httpClient = new DefaultHttpClient();
     }
 
     public void start(String url) {
@@ -26,7 +28,6 @@ public class HTTPClientWrapper {
     public String process(String url) throws IOException, IllegalStateException {
         processing = true;
 
-        DefaultHttpClient httpClient = new DefaultHttpClient();
         HttpGet getRequest = new HttpGet(url);
 
         getRequest.addHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:51.0) Gecko/20100101 Firefox/51.0");
@@ -42,7 +43,12 @@ public class HTTPClientWrapper {
         StringBuilder data = new StringBuilder();
         while ((output = br.readLine()) != null) {
             data.append(output);
+            if (!processing) {
+                br.close();
+                return "";
+            }
         }
+        br.close();
 
         processing = false;
 
